@@ -1,0 +1,10 @@
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.pptx
+*.pdf
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
