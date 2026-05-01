@@ -158,16 +158,32 @@
 <script>
 var R=[
   {id:"cs",p:"1.",n:"Course Setup & Organization",mx:15,s:[
-    {i:"1.1",t:"Clear Purpose",x:3},{i:"1.2",t:"Organized Structure",x:3},{i:"1.3",t:"Course Navigation",x:3},{i:"1.4",t:"Accessible Materials",x:3},{i:"1.5",t:"Visual Clarity",x:3}
+    {i:"1.1",t:"Clear Purpose",d:"The course states its purpose and learning objectives in plain language (e.g. 'At the end of this course, participants will be able to...').",x:3},
+    {i:"1.2",t:"Organized Structure",d:"Content is divided into logical sections or modules with consistent naming and layout.",x:3},
+    {i:"1.3",t:"Course Navigation",d:"Learners can easily find materials, assignments, and instructions (ideally with a 'Start Here' page).",x:3},
+    {i:"1.4",t:"Accessible Materials",d:"Files and media meet accessibility standards (readable text, captions, alt text, mobile-friendly formats).",x:3},
+    {i:"1.5",t:"Visual Clarity",d:"The course avoids clutter, uses consistent fonts and colors, and includes images or videos that reinforce content rather than distract from it.",x:3}
   ]},
   {id:"ea",p:"2.",n:"Engagement & Application",mx:15,s:[
-    {i:"2.1",t:"Active Learning",x:3},{i:"2.2",t:"Real-World Connection",x:3},{i:"2.3",t:"Learner Input",x:3},{i:"2.4",t:"Consistency in Participation",x:3},{i:"2.5",t:"Motivation & Feedback",x:3}
+    {i:"2.1",t:"Active Learning",d:"Learners do more than read — they act (discussion, reflection, quiz, or short scenario responses).",x:3},
+    {i:"2.2",t:"Real-World Connection",d:"Scenarios, policies, or examples directly connect training to on-the-job applications.",x:3},
+    {i:"2.3",t:"Learner Input",d:"The course provides opportunities for participants to share ideas, examples, or feedback.",x:3},
+    {i:"2.4",t:"Consistency in Participation",d:"Expectations for participation or interaction are clear (e.g., how to post or respond).",x:3},
+    {i:"2.5",t:"Motivation & Feedback",d:"The course provides encouragement and progress feedback (announcements, badges, progress tracking, checklists, status updates).",x:3}
   ]},
   {id:"av",p:"3.",n:"Assessment & Verification",mx:15,s:[
-    {i:"3.1",t:"Aligned Assessments",x:3},{i:"3.2",t:"Multiple Assessment Types",x:3},{i:"3.3",t:"Clear Instructions",x:3},{i:"3.4",t:"Feedback Process",x:3},{i:"3.5",t:"Tracking & Reporting",x:3}
+    {i:"3.1",t:"Aligned Assessments",d:"Assessments clearly measure the stated learning objectives or job skills, and tie back to the content presented.",x:3},
+    {i:"3.2",t:"Multiple Assessment Types",d:"Uses varied methods (quiz, scenario, file upload, simulation, acknowledgement form, on-the-job observations, etc).",x:3},
+    {i:"3.3",t:"Clear Instructions",d:"Each task includes clear directions, due dates, and grading or completion criteria.",x:3},
+    {i:"3.4",t:"Feedback Process",d:"Learners receive timely, constructive feedback or completion confirmation.",x:3},
+    {i:"3.5",t:"Tracking & Reporting",d:"Completions, certifications, or acknowledgements can be exported/reported via Blackboard in association with a registration/information management system such as Blackboard's Course Catalog or Genius SIS.",x:3}
   ]},
   {id:"lc",p:"4.",n:"Learner Support & Communication",mx:15,s:[
-    {i:"4.1",t:"Course Orientation",x:3},{i:"4.2",t:"Instructor / Contact Info",x:3},{i:"4.3",t:"Policies & Expectations",x:3},{i:"4.4",t:"Technical Support Access",x:3},{i:"4.5",t:"Feedback Opportunity",x:3}
+    {i:"4.1",t:"Course Orientation",d:"Learners receive instructions on how to navigate Blackboard and the specific course layout.",x:3},
+    {i:"4.2",t:"Instructor / Contact Info",d:"Contact details or a help desk link are visible and accurate.",x:3},
+    {i:"4.3",t:"Policies & Expectations",d:"Course policies (attendance, deadlines, retakes) are clear and accessible.",x:3},
+    {i:"4.4",t:"Technical Support Access",d:"Information on how to get technical or accessibility help is included.",x:3},
+    {i:"4.5",t:"Feedback Opportunity",d:"Learners are provided a clear and accessible way to share input on course effectiveness or report content issues, either during the course or through an end-of-course survey.",x:3}
   ]}
 ];
 
@@ -223,10 +239,11 @@ function exJSON(txt){var c=txt.trim().replace(/^```json\s*/i,"").replace(/^```\s
 var CQF_CTX='IMPORTANT - CQF EVALUATION CONTEXT:\n- Business & Government focused course quality evaluation (not academic).\n- WITHOUT ENROLLMENTS MODE: No student data. Evaluate DESIGN, STRUCTURE, SETUP only.\n- Score 0-3: 3=Fully Met, 2=Partially Met, 1=Not Met, 0=Not Applicable.\n- If structures EXIST (discussions, assignments, rubrics, certificates) give full credit.\n- Blackboard features to credit: Announcements, Grade Center, Discussions, Assignments, Rubrics, Progress Tracking, Certificates, Course Catalog, Genius SIS integration.\n- Getting Started/Welcome area = orientation. Policies folder = deadlines, attendance, expectations.\n- BENEFIT OF THE DOUBT: if file path or content suggests a feature exists, credit it.\n';
 
 async function analyzeOne(cat,cd){
-  var sl=cat.s.map(function(s){return s.i+": "+s.t;}).join("; ");
+  var sl=cat.s.map(function(s){return s.i+' – '+s.t+':\n   '+s.d;}).join('\n');
   var p='Evaluate this Blackboard course export for "'+cat.n+'" using the Course Quality Framework (CQF).\n\n'+CQF_CTX;
-  p+='Indicators to score (each 0-3): '+sl+'\n';
+  p+='Score each indicator 0-3 (3=Fully Met, 2=Partially Met, 1=Not Met, 0=Not Applicable):\n\n'+sl+'\n\n';
   p+='Course: '+cd.fn+' ('+cd.fc+' files). Types: '+cd.tc+'\nPaths: '+cd.fp.substring(0,800)+'\n\nManifest:\n'+cd.mx.substring(0,1500)+'\n\nContent:\n'+cd.ct.substring(0,4500)+'\n\n';
+  p+='Write strengths and improvements as flowing sentences that cite specific evidence from the course tied to the named indicators above. Do not give generic observations — every sentence must reference what was or was not found in this specific course relative to the indicator criteria.\n\n';
   p+='Return ONLY JSON: {"findings":"2-3 sentences","strengths":["s1","s2"],"improvements":["i1","i2"],"scores":[[id,score,rating],...]}\nscores: id=string (e.g. "1.1"), score=integer 0-3, rating=FM/PM/NM/NA. Be FAIR and constructive. ONLY JSON.';
   var txt=await ask(p);var obj=exJSON(txt);
   var rm={"FM":"fully_met","PM":"partially_met","NM":"not_met","NA":"not_applicable"};
